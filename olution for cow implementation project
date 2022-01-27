@@ -1,0 +1,267 @@
+[33mcommit a6c6a67342035bc9bf4d2f04c109897955066e7f[m[33m ([m[1;36mHEAD -> [m[1;32mcow[m[33m, [m[1;31morigin/cow[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Sarantis Paskalis <paskalis@di.uoa.gr>
+Date:   Mon Dec 20 09:02:43 2021 +0200
+
+    modified for k22
+
+[33mcommit c9818915934504523e52a33e2755b7aff54c495e[m
+Author: felipe Monsalve <felipemonsalve@C02FK93AMD6M.tld>
+Date:   Wed Oct 6 18:11:30 2021 -0400
+
+    cow lab
+
+[33mcommit a1da53a5a12e21b44a2c79d962a437fa2107627c[m
+Author: Frans Kaashoek <kaashoek@mit.edu>
+Date:   Wed Sep 1 07:31:22 2021 -0400
+
+    update
+
+[33mcommit 8ca56e9e0b878a90bac9860e971b0d849d7a83e7[m
+Author: Frans Kaashoek <kaashoek@mit.edu>
+Date:   Wed Sep 1 07:29:12 2021 -0400
+
+    memmove(dst, src, 0) leads to overflow in `while(n-- > 0)` as `n` is uint64 (thanks
+    Matúš Jókay <matus.jokay@stuba.sk>)
+
+[33mcommit bf4816c9c6a23ee5489ff4f0b04f21b002b3028e[m
+Author: Frans Kaashoek <kaashoek@mit.edu>
+Date:   Wed Sep 1 07:24:07 2021 -0400
+
+    Delete unused code (Jude Rich <juder11@gmail.com>)
+
+[33mcommit 02424b1f8406d321e2f2a240328a2ee255a351af[m
+Author: Frans Kaashoek <kaashoek@mit.edu>
+Date:   Tue Aug 31 21:05:42 2021 -0400
+
+    update
+
+[33mcommit a103113db0ffc06d6f0127cb2ef87cc6a4e518ae[m
+Author: yzhu <891085309@qq.com>
+Date:   Tue Oct 20 21:42:34 2020 +0800
+
+    fix ld warning: undefined symbol _entry
+
+[33mcommit 840aae871fa1df9fdc4684ccc39709bf2878f6ea[m
+Author: Pavan Maddamsetti <pavan.maddamsetti@gmail.com>
+Date:   Wed Oct 21 03:03:17 2020 -0400
+
+    die
+
+[33mcommit e07ca6614599e68747fa454da95f007f6941143a[m
+Author: Pavan Maddamsetti <pavan.maddamsetti@gmail.com>
+Date:   Sun Nov 8 01:56:57 2020 -0500
+
+    comment
+
+[33mcommit 19ff3796618b6c2874addf4414c1ae6f2c0b50b2[m
+Author: l0stman <endian.sign@gmail.com>
+Date:   Tue Nov 10 07:48:02 2020 +0300
+
+    exec() only accepts MAXARG arguments
+    
+    The terminating NULL string is already included (see sys_exec()).
+
+[33mcommit 91951429599eb21130432d1802f7bd1b1b7cbd61[m
+Author: l0stman <endian.sign@gmail.com>
+Date:   Tue Nov 10 08:31:16 2020 +0300
+
+    Assert that the size in mappages() is always positive
+    
+    If va % PGSIZE == 0 and size == 0, we have last < a at the start of
+    the loop so we might never terminate.  That being said, this
+    particular case couldn't be triggered for now.
+
+[33mcommit f55def8a64f5b5faa7373ba5e35c318cc4ea666f[m
+Author: kimjungwow <jw950310@kaist.ac.kr>
+Date:   Fri Dec 4 04:46:50 2020 +0000
+
+    Change `inode cache` in main.c to `inode table`
+
+[33mcommit dd6d5d0a410214f34906d42cc9f8ebb874e08945[m
+Author: amane-uehara <62415046+amane-uehara@users.noreply.github.com>
+Date:   Sat Dec 12 03:08:14 2020 +0900
+
+    I fixed a typo in the comment.
+
+[33mcommit 49f1e2f8886c6874ef4ac2b6e6d77aa156b04e9b[m
+Author: flespark <0860734llx@gmail.com>
+Date:   Sun Jan 3 21:07:12 2021 +0800
+
+    fix a invalid printf format string
+
+[33mcommit 1226b09dc4c0f3d9e97265e0fc03a81e04bdea2e[m
+Author: OptimisticSide <47266822+optimisticside@users.noreply.github.com>
+Date:   Fri Apr 16 09:14:13 2021 -0700
+
+    Remove setproc prototype
+
+[33mcommit f524198792678428b10e5ce55361823fe57de75e[m
+Author: Vadim Kolontsov <vadim@kolontsov.com>
+Date:   Sun May 16 21:56:46 2021 +0300
+
+    fix comment for 'sepc'
+
+[33mcommit 8d4ff0bc1e8e7750e17fae39572fa5996cb9f5e9[m
+Author: FIXED-TERM Chen Ian (BT-CO/QMM5) <cia1tp@bosch.com>
+Date:   Tue May 18 11:29:42 2021 +0800
+
+    fix typos in user/usertest.c & kernel/log.c
+
+[33mcommit 9655f71758003f93294e82926783024a7e4bcdde[m
+Author: Jonathan Behrens <fintelia@gmail.com>
+Date:   Mon Aug 30 16:27:52 2021 -0400
+
+    Configure PMP at boot
+
+[33mcommit 6de0381d619f01777d84cbcd3affa96ad376c2e1[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Tue Aug 10 07:12:41 2021 -0400
+
+    check for alignment just once
+
+[33mcommit 3b3f83f10036391047a6e2fd3eb7b1a93aa05ed6[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Fri Aug 6 11:06:24 2021 -0400
+
+    check that there's no panic if user process tries to write >= MAXVA
+
+[33mcommit 08c9eda85fe68b8f311494d4cf78cfacda06868d[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Fri Jul 2 14:24:45 2021 -0400
+
+    sync usertests
+
+[33mcommit 1841baa3dd04ca34b5c7d31169ee6735cc35447f[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Fri Jul 2 09:57:14 2021 -0400
+
+    keep usertests.c in sync with riscv-sol-2020
+
+[33mcommit 077323a8f0b3440fcc3d082096a2d83fe5461d70[m
+Author: Frans Kaashoek <kaashoek@mit.edu>
+Date:   Mon Nov 23 19:30:15 2020 -0500
+
+    Rename icache to itable
+    
+    The inode cache isn't really a cache. The main purpose of it is to
+    allow for synchronization (locking individual inodes), providing
+    long-lived references to inodes, and ensuring that there is only inode
+    in memory.
+
+[33mcommit 6e3f75c2aa670bc0d47928cd48408b81e5bd758d[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Thu Nov 19 16:48:41 2020 -0500
+
+    suppress an incorrect error message in grind
+
+[33mcommit 231c08dc5e5e39a6fafda832e6935beb38ef3887[m
+Merge: 60b63b9 9599a8e
+Author: Frans Kaashoek <kaashoek@mit.edu>
+Date:   Thu Nov 5 19:51:41 2020 -0500
+
+    Merge remote-tracking branch 'refs/remotes/origin/riscv' into riscv
+
+[33mcommit 60b63b9d077f2c9d722e8572e5e78379cfaef796[m
+Author: Frans Kaashoek <kaashoek@mit.edu>
+Date:   Thu Nov 5 19:00:37 2020 -0500
+
+    x
+
+[33mcommit ef97f65025b3704a90fbde79ef3ce3a38bcb6899[m
+Author: Frans Kaashoek <kaashoek@mit.edu>
+Date:   Thu Nov 5 17:32:35 2020 -0500
+
+    kill/status test
+
+[33mcommit b4c2851bb347d5243a4498fdd9e1f0c9a23e6498[m
+Author: Frans Kaashoek <kaashoek@mit.edu>
+Date:   Thu Nov 5 11:09:21 2020 -0500
+
+    Be principled: acquire lock first
+
+[33mcommit 38084bcea84e79f5fff9ce8c7f91c077fc1eacd3[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Thu Nov 5 09:47:59 2020 -0500
+
+    proc_tree_lock -> wait_lock
+
+[33mcommit ba8d9f4808bd2c59df42a6615920a22e3735c359[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Thu Nov 5 07:32:10 2020 -0500
+
+    don't over-lock in exit()
+
+[33mcommit 9599a8e616dc5a1aa6b0c3b7c0c6ed9ffdf5e67a[m
+Author: Frans Kaashoek <kaashoek@mit.edu>
+Date:   Thu Nov 5 19:00:37 2020 -0500
+
+    x
+
+[33mcommit d7b308fe81b9fdee1f6060f847b37a252214266a[m
+Author: Frans Kaashoek <kaashoek@mit.edu>
+Date:   Thu Nov 5 17:32:35 2020 -0500
+
+    kill/status test
+
+[33mcommit b63d3506e9fbe7db1cd117db746fb58b7712ab4f[m
+Author: Frans Kaashoek <kaashoek@mit.edu>
+Date:   Thu Nov 5 11:09:21 2020 -0500
+
+    Be principled: acquire lock first
+
+[33mcommit 774288e05a5891a4de0a165e2a65665714f6ca34[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Thu Nov 5 09:47:59 2020 -0500
+
+    proc_tree_lock -> wait_lock
+
+[33mcommit bc943c230960c414fd43b93317c3825f1a99c611[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Thu Nov 5 07:32:10 2020 -0500
+
+    don't over-lock in exit()
+
+[33mcommit 47323c97cf6bcf5e238c518762ba048e8795f57d[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Tue Nov 3 16:35:20 2020 -0500
+
+    oops
+
+[33mcommit 2875069973d3e0ca4a70f6e7648a92b14cf08ab6[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Tue Nov 3 15:02:08 2020 -0500
+
+    Frans' proc_lock.
+
+[33mcommit b48ea5d2209bb9addf43687739245734038b991e[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Sun Nov 1 11:11:38 2020 -0500
+
+    free proc if kalloc fails
+
+[33mcommit 5e392531c07966fd8a6bee50e3e357c553fb2a2f[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Fri Oct 23 10:18:30 2020 -0400
+
+    hopefully make writei more correct
+
+[33mcommit e1bb4c74346bc439e8c0cd93750f90bb82c537c8[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Thu Oct 22 06:36:36 2020 -0400
+
+    test for closed pipe or killed on every char, not just if pipe full
+
+[33mcommit 329935eca8484d7f1d34c1d43b16c495d861ad75[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Tue Oct 20 07:02:44 2020 -0400
+
+    fix uart.c to work with UART_TX_BUF_SIZE == 1
+
+[33mcommit 13dccb0380d3c694083095040fadd03bfe4f598c[m
+Author: Robert Morris <rtm@csail.mit.edu>
+Date:   Tue Oct 20 06:55:51 2020 -0400
+
+    consolewrite does not need cons.lock -- can lead to sleep() with lock held
+
+[33mcommit 7dea4b93c82354d5a24e8882860af5a1d92282e6[m
+Author: Robert Morris <rtm@c

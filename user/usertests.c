@@ -2280,7 +2280,6 @@ sbrkfail(char *s)
     if(pids[i] != -1)
       read(fds[0], &scratch, 1);
   }
-
   // if those failed allocations freed up the pages they did allocate,
   // we'll be able to allocate here
   c = sbrk(PGSIZE);

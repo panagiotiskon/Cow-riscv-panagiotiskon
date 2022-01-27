@@ -15,6 +15,8 @@ extern char etext[];  // kernel.ld sets this to end of kernel code.
 
 extern char trampoline[]; // trampoline.S
 
+
+
 // Make a direct-map page table for the kernel.
 pagetable_t
 kvmmake(void)
@@ -98,7 +100,7 @@ walk(pagetable_t pagetable, uint64 va, int alloc)
 }
 
 // Look up a virtual address, return the physical address,
-// or 0 if not mapped.
+// or .
 // Can only be used to look up user pages.
 uint64
 walkaddr(pagetable_t pagetable, uint64 va)
@@ -108,7 +110,6 @@ walkaddr(pagetable_t pagetable, uint64 va)
 
   if(va >= MAXVA)
     return 0;
-
   pte = walk(pagetable, va, 0);
   if(pte == 0)
     return 0;
@@ -174,8 +175,8 @@ uvmunmap(pagetable_t pagetable, uint64 va, uint64 npages, int do_free)
   for(a = va; a < va + npages*PGSIZE; a += PGSIZE){
     if((pte = walk(pagetable, a, 0)) == 0)
       panic("uvmunmap: walk");
-    if((*pte & PTE_V) == 0)
-      panic("uvmunmap: not mapped");
+    if((*pte & PTE_V) == 0){
+      panic("uvmunmap: not mapped");}
     if(PTE_FLAGS(*pte) == PTE_V)
       panic("uvmunmap: not a leaf");
     if(do_free){
@@ -303,25 +304,24 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
   pte_t *pte;
   uint64 pa, i;
   uint flags;
-  char *mem;
 
-  for(i = 0; i < sz; i += PGSIZE){
-    if((pte = walk(old, i, 0)) == 0)
+
+  for(i = 0; i < sz; i += PGSIZE){   
+    if((pte = walk(old, i, 0)) == 0)    //get pte 
       panic("uvmcopy: pte should exist");
-    if((*pte & PTE_V) == 0)
+    if((*pte & PTE_V) == 0)           //check pte is valid
       panic("uvmcopy: page not present");
     pa = PTE2PA(*pte);
     flags = PTE_FLAGS(*pte);
-    if((mem = kalloc()) == 0)
+    flags &= ~PTE_W;         //reset write bit so that pa is read-only
+    if(mappages(new, i, PGSIZE, (uint64)pa, flags) != 0){   
       goto err;
-    memmove(mem, (char*)pa, PGSIZE);
-    if(mappages(new, i, PGSIZE, (uint64)mem, flags) != 0){
-      kfree(mem);
-      goto err;
-    }
+    }    
+    *pte &= ~PTE_W;   //mark parent page table entry read only
+    
+    increase_ref_counter((char*)pa);  //increase ref_counter of pa
   }
   return 0;
-
  err:
   uvmunmap(new, 0, i / PGSIZE, 1);
   return -1;
@@ -329,16 +329,56 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
 
 // mark a PTE invalid for user access.
 // used by exec for the user stack guard page.
+
+
 void
 uvmclear(pagetable_t pagetable, uint64 va)
 {
   pte_t *pte;
-  
   pte = walk(pagetable, va, 0);
   if(pte == 0)
     panic("uvmclear");
   *pte &= ~PTE_U;
 }
+
+int cow_handler(pagetable_t pagetable, uint64 va)
+{
+  pte_t* pte; 
+  char* mem;
+  uint64 flags, pa;
+
+  if (va>=MAXVA)     //check that va isnt above maximum address
+      return -1;
+  if ((pte =walk(pagetable, va,0))==0)    //get page table entry 
+      return -1;
+  if ((pa = PTE2PA(*pte))==0)   //get pa
+      return -1;
+  if((pa % PGSIZE)!=0)  //check that pa has the correct size of 4096 bytes
+      return -1;
+  if (pa>=PHYSTOP)    //check that pa doesnt exceed PHYSTOP = (0x86400000)
+      return -1;
+  if((*pte & PTE_V)==0)      //check that pte is valid
+      return -1;     
+  if((*pte & PTE_U)==0)   //check that pte is user 
+      return -1;
+  if((*pte & PTE_R)==0)     //check that pte is read only
+      return -1;
+  if ((*pte & PTE_W)!=0)   //if pte is writable then we can  use walkaddr
+      return 0;
+  if(return_ref_counter((char*)pa)==1){     // if ref counter of pa=1 
+      *pte |= PTE_W;                        //just make it writable 
+      return pa;                            //and return it
+  }
+  if ((mem = kalloc())==0)         //get new pa
+      return -1;
+  flags = PTE_FLAGS(*pte);         
+  flags |= PTE_W;                    //reset flag to make it writable
+  memmove(mem, (char*)pa, PGSIZE);      //copy pa to mem
+  *pte = PA2PTE(mem) | flags ;           //copy the flags to old pte
+  decrease_ref_counter((char*)pa);      //decrease ref counter of pa
+  return (uint64)pa;        //return pa
+}
+
 
 // Copy from kernel to user.
 // Copy len bytes from src to virtual address dstva in a given page table.
@@ -349,8 +389,15 @@ copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
   uint64 n, va0, pa0;
 
   while(len > 0){
+
     va0 = PGROUNDDOWN(dstva);
-    pa0 = walkaddr(pagetable, va0);
+    if(cow_handler(pagetable, va0)==-1){    //if an error occurs return -1
+      return -1;
+    }
+    else if (cow_handler(pagetable, va0)==0)  //is pa is writable the take it from walkaddr
+      pa0 = walkaddr(pagetable, va0);
+    else 
+      pa0 = cow_handler(pagetable, va0);     //else get it from cow handler
     if(pa0 == 0)
       return -1;
     n = PGSIZE - (dstva - va0);

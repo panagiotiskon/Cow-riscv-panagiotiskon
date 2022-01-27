@@ -6,6 +6,8 @@
 #include "proc.h"
 #include "defs.h"
 
+#define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
+
 struct spinlock tickslock;
 uint ticks;
 
@@ -13,7 +15,6 @@ extern char trampoline[], uservec[], userret[];
 
 // in kernelvec.S, calls kerneltrap().
 void kernelvec();
-
 extern int devintr();
 
 void
@@ -65,12 +66,24 @@ usertrap(void)
     intr_on();
 
     syscall();
-  } else if((which_dev = devintr()) != 0){
+  } 
+  else if(r_scause()==15){     //if scause is 15 
+    uint64 va;
+    void* pt;
+    va =  r_stval();  //get va 
+    pt = p->pagetable;   //get page table
+    uint64 new_va = PGROUNDDOWN(va);   
+    if(cow_handler(pt,new_va)==-1)    //if cow handler returns -1 the terminate
+          p->killed=1;
+        
+  }
+
+  else if((which_dev = devintr()) != 0){
     // ok
   } else {
     printf("usertrap(): unexpected scause %p pid=%d\n", r_scause(), p->pid);
     printf("            sepc=%p stval=%p\n", r_sepc(), r_stval());
-    p->killed = 1;
+    p->killed = 1;   
   }
 
   if(p->killed)
